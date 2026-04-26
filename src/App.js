@@ -2,26 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid'; 
 import './App.css';
 import TransactionForm from './components/Form/TransactionForm';
+// 1. Importar os novos componentes (Certifique-se de que os caminhos estão corretos)
+import FinanceChart from './components/Chart/FinanceChart';
+import TransactionCard from './components/Card/TransactionCard';
 
 function App() {
-  // 1. Estado da lista (Lê do LocalStorage ou inicia vazio)
   const [transacoes, setTransacoes] = useState(() => {
     const salvos = localStorage.getItem('finance_data');
     return salvos ? JSON.parse(salvos) : [];
   });
 
-  // 2. Persistência (Salva no navegador sempre que mudar)
   useEffect(() => {
     localStorage.setItem('finance_data', JSON.stringify(transacoes));
   }, [transacoes]);
 
-  // 3. Função para adicionar nova transação
   const addTransaction = (novaTransacao) => {
     const transacaoComId = { ...novaTransacao, id: uuidv4() };
     setTransacoes([transacaoComId, ...transacoes]);
   };
 
-  // 4. Lógica de Agrupamento (O que o Exercício 2 e 3 pedem)
+  // Função para deletar (passaremos para o Card)
+  const deleteTransaction = (id) => {
+    setTransacoes(transacoes.filter(t => t.id !== id));
+  };
+
   const totalEntradas = transacoes
     .filter(t => t.tipo === 'Entrada')
     .reduce((acc, t) => acc + Number(t.valor), 0);
@@ -38,7 +42,6 @@ function App() {
         <h1>FinanceVision Dashboard</h1>
       </header>
 
-      {/* Cards de Resumo Visual */}
       <section className="resumo">
         <div className="card-resumo">
           <h3>Entradas</h3>
@@ -56,10 +59,27 @@ function App() {
         </div>
       </section>
 
-      {/* Formulário de entrada */}
       <TransactionForm onAddTransaction={addTransaction} />
 
-      {/* O próximo passo será criar o componente de Gráficos aqui abaixo */}
+      {/* 2. Adicionar os Gráficos passando os dados calculados */}
+      <FinanceChart 
+        transacoes={transacoes} 
+        entradas={totalEntradas} 
+        saidas={totalSaidas} 
+      />
+
+      {/* 3. Adicionar a Lista de Histórico */}
+      <div className="historico-lista" style={{ marginTop: '30px' }}>
+        <h3>Últimas Transações</h3>
+        {transacoes.length === 0 && <p>Nenhuma transação registrada.</p>}
+        {transacoes.map((t) => (
+          <TransactionCard 
+            key={t.id} 
+            item={t} 
+            onDelete={deleteTransaction} 
+          />
+        ))}
+      </div>
     </div>
   );
 }
