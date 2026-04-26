@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/finance-vision/static/css/main.5c545060.css",
-    "main.js": "/finance-vision/static/js/main.a7b1451c.js",
+    "main.js": "/finance-vision/static/js/main.9af3476e.js",
     "index.html": "/finance-vision/index.html",
     "main.5c545060.css.map": "/finance-vision/static/css/main.5c545060.css.map",
-    "main.a7b1451c.js.map": "/finance-vision/static/js/main.a7b1451c.js.map"
+    "main.9af3476e.js.map": "/finance-vision/static/js/main.9af3476e.js.map"
   },
   "entrypoints": [
     "static/css/main.5c545060.css",
-    "static/js/main.a7b1451c.js"
+    "static/js/main.9af3476e.js"
   ]
 }
